@@ -1,0 +1,451 @@
+{
+  "cases_fingerprint": "3c86a7a1eb150da4266cd4bc80b6cfa9115c3a72553a22f69369ccd8b0f59784",
+  "crash_scenarios": {
+    "all_passed": true,
+    "passed": 2,
+    "scenarios": [
+      {
+        "crash_phase": "after_manifest_before_commit",
+        "events": [
+          {
+            "detail": "req-crash-pre",
+            "kind": "prepare"
+          }
+        ],
+        "expect_returncode": 42,
+        "manifests_after_recovery": 0,
+        "passed": true,
+        "records_after_recovery": 0,
+        "removed_orphan_manifests": [
+          "req-crash-pre.json"
+        ],
+        "scenario_id": "KILL_PRE_COMMIT",
+        "stderr_tail": "",
+        "worker_returncode": 42
+      },
+      {
+        "crash_phase": "after_commit",
+        "events": [
+          {
+            "detail": "req-crash-post",
+            "kind": "prepare"
+          },
+          {
+            "detail": "req-crash-post",
+            "kind": "commit_allow"
+          },
+          {
+            "detail": "req-crash-post",
+            "kind": "crash_after_commit"
+          }
+        ],
+        "expect_returncode": 43,
+        "manifests_after_recovery": 1,
+        "passed": true,
+        "records_after_recovery": 1,
+        "removed_orphan_manifests": [],
+        "scenario_id": "KILL_POST_COMMIT",
+        "stderr_tail": "",
+        "worker_returncode": 43
+      }
+    ],
+    "total": 2
+  },
+  "decision_table": {
+    "all_passed": true,
+    "cases": [
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C01",
+        "expect": "ALLOW/OK",
+        "note": "基线摘要允许",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C02",
+        "expect": "ALLOW/OK",
+        "note": "G1 组规则允许",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "DENY/NO_AUTHORIZATION",
+        "case_id": "C03",
+        "expect": "DENY/NO_AUTHORIZATION",
+        "note": "组规则跨组不生效，默认拒绝",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/DENY_EXPLICIT",
+        "case_id": "C04",
+        "expect": "DENY/DENY_EXPLICIT",
+        "note": "明确拒绝覆盖组允许",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/RULE_EXPIRED",
+        "case_id": "C05",
+        "expect": "DENY/RULE_EXPIRED",
+        "note": "允许规则已过期",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/NO_AUTHORIZATION",
+        "case_id": "C06",
+        "expect": "DENY/NO_AUTHORIZATION",
+        "note": "无任何规则，默认拒绝",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C07",
+        "expect": "ALLOW/OK",
+        "note": "签发者+路径段联合允许",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "DENY/DENY_EXPLICIT",
+        "case_id": "C08",
+        "expect": "DENY/DENY_EXPLICIT",
+        "note": "敏感子目录联合拒绝覆盖允许",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C09",
+        "expect": "ALLOW/OK",
+        "note": "G1 基线联合允许 R06 命中",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C10",
+        "expect": "ALLOW/OK",
+        "note": "G2 同时命中基线 R06 与组 R08",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C11",
+        "expect": "ALLOW/OK",
+        "note": "命中 acme/signed 同名段允许",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "DENY/DENY_EXPLICIT",
+        "case_id": "C12",
+        "expect": "DENY/DENY_EXPLICIT",
+        "note": "同名段下拒绝子树优先",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/NO_AUTHORIZATION",
+        "case_id": "C13",
+        "expect": "DENY/NO_AUTHORIZATION",
+        "note": "exact 段不得子串匹配 exactish",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/NO_AUTHORIZATION",
+        "case_id": "C14",
+        "expect": "DENY/NO_AUTHORIZATION",
+        "note": "无临时授权时 G3 不许 eta",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C15",
+        "expect": "ALLOW/OK",
+        "note": "双审批临时放宽生效",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "DENY/RULE_EXPIRED",
+        "case_id": "C16",
+        "expect": "DENY/RULE_EXPIRED",
+        "note": "临时授权到期",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/NO_AUTHORIZATION",
+        "case_id": "C17",
+        "expect": "DENY/NO_AUTHORIZATION",
+        "note": "同审批人临时授权在装载时被拒，等同无授权",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C18",
+        "expect": "ALLOW/OK",
+        "note": "远端状态 GOOD",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "DENY/REMOTE_ISSUER_STATUS_BAD",
+        "case_id": "C19",
+        "expect": "DENY/REMOTE_ISSUER_STATUS_BAD",
+        "note": "远端 SUSPENDED",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/REMOTE_ISSUER_STATUS_BAD",
+        "case_id": "C20",
+        "expect": "DENY/REMOTE_ISSUER_STATUS_BAD",
+        "note": "远端 REVOKED",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/ISSUER_KEY_REVOKED",
+        "case_id": "C21",
+        "expect": "DENY/ISSUER_KEY_REVOKED",
+        "note": "叶子密钥已吊销",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/ISSUER_KEY_REVOKED",
+        "case_id": "C22",
+        "expect": "DENY/ISSUER_KEY_REVOKED",
+        "note": "轮换后旧钥 ROTATED 立即失效",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/ISSUER_UNTRUSTED",
+        "case_id": "C23",
+        "expect": "DENY/ISSUER_UNTRUSTED",
+        "note": "外来组织根不受信",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/ISSUER_CHAIN_INVALID",
+        "case_id": "C24",
+        "expect": "DENY/ISSUER_CHAIN_INVALID",
+        "note": "内容摘要与 chain_digest 不匹配",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/ISSUER_CHAIN_INVALID",
+        "case_id": "C25",
+        "expect": "DENY/ISSUER_CHAIN_INVALID",
+        "note": "伪造的签发见证",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C26",
+        "expect": "ALLOW/OK",
+        "note": "phi 在批准入口允许",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "DENY/NO_AUTHORIZATION",
+        "case_id": "C27",
+        "expect": "DENY/NO_AUTHORIZATION",
+        "note": "同一摘要移动入口，身份变化须重判且无授权",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C28",
+        "expect": "ALLOW/OK",
+        "note": "主程序+2 依赖全部允许",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "DENY/DENY_EXPLICIT",
+        "case_id": "C29",
+        "expect": "DENY/DENY_EXPLICIT",
+        "note": "主程序被明确拒绝，整单拒绝",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "DENY/NO_AUTHORIZATION",
+        "case_id": "C30",
+        "expect": "DENY/NO_AUTHORIZATION",
+        "note": "依赖无授权，整单拒绝",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C31",
+        "expect": "ALLOW/OK",
+        "note": "三件套全部允许",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "DENY/DENY_EXPLICIT",
+        "case_id": "C32",
+        "expect": "DENY/DENY_EXPLICIT",
+        "note": "套件中混入明确拒绝部件",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C33",
+        "expect": "ALLOW/OK",
+        "note": "主程序+25 依赖达到上限全部允许",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C34",
+        "expect": "ALLOW/OK",
+        "note": "换钥后新钥请求作为新身份判定允许",
+        "passed": true,
+        "persisted_records": 1
+      },
+      {
+        "actual": "DENY/RULE_EXPIRED",
+        "case_id": "C35",
+        "expect": "DENY/RULE_EXPIRED",
+        "note": "联合允许规则已过期",
+        "passed": true,
+        "persisted_records": 0
+      },
+      {
+        "actual": "ALLOW/OK",
+        "case_id": "C36",
+        "expect": "ALLOW/OK",
+        "note": "G2 组允许 omega 在 G2 生效",
+        "passed": true,
+        "persisted_records": 1
+      }
+    ],
+    "failed": 0,
+    "passed": 36,
+    "total": 36
+  },
+  "input_file": "D:\\my-workspace\\ai-workspace\\zhongqiang\\CC_Codex 用户反馈标注(领域专项)项目\\选题\\060_应用执行授权的分代收回与原子准入\\作答工作区_uid12693-20261120-003633-claude-r1\\cases.json",
+  "ordered_scenario_failures": [],
+  "ordered_scenarios": {
+    "X": {
+      "admission_rows": [],
+      "expect_final_error": "STALE_DEVICE_GENERATION",
+      "expect_replay_error": "NO_AUTHORIZATION",
+      "records": 0,
+      "scenario": "X",
+      "steps": [
+        {
+          "after_move_generation": 2,
+          "commit_decision": "DENY",
+          "commit_error_code": "STALE_DEVICE_GENERATION",
+          "preview": "OK",
+          "step": "prepare_then_move_then_commit"
+        },
+        {
+          "commit_decision": "DENY",
+          "commit_error_code": "NO_AUTHORIZATION",
+          "step": "replay_at_new_generation"
+        }
+      ],
+      "title": "旧策略预检后设备转组"
+    },
+    "Y": {
+      "admission_rows": [
+        {
+          "decision": "ALLOW",
+          "policy_version": 1,
+          "request_id": "req-y-admit"
+        }
+      ],
+      "expect_rekey_error": "NO_AUTHORIZATION",
+      "expect_replay_error": "ISSUER_KEY_REVOKED",
+      "records": 1,
+      "scenario": "Y",
+      "steps": [
+        {
+          "decision": "ALLOW",
+          "records": 1,
+          "step": "initial_admit"
+        },
+        {
+          "new_generation": 2,
+          "step": "revoke_dependency_key"
+        },
+        {
+          "decision": "DENY",
+          "error_code": "ISSUER_KEY_REVOKED",
+          "step": "replay_old_generation_after_revoke"
+        },
+        {
+          "decision": "DENY",
+          "error_code": "NO_AUTHORIZATION",
+          "note": "新钥恢复签发链，但新部件身份按同代策略重新判定",
+          "step": "retry_with_rotated_key_new_generation"
+        }
+      ],
+      "title": "一项依赖许可被吊销"
+    },
+    "Z": {
+      "admission_rows": [
+        {
+          "decision": "ALLOW",
+          "policy_version": 1,
+          "request_id": "req-z-admit"
+        }
+      ],
+      "expect_retry_error": "NO_AUTHORIZATION",
+      "records": 1,
+      "scenario": "Z",
+      "steps": [
+        {
+          "policy_version": 1,
+          "receipt_id": "rcp-c13aee7ab0d33158",
+          "step": "initial_admit"
+        },
+        {
+          "new_policy_version": 2,
+          "step": "withdraw_rule"
+        },
+        {
+          "policy_version": 1,
+          "replayed": true,
+          "same_receipt": true,
+          "step": "idempotent_replay_same_request_id"
+        },
+        {
+          "decision": "DENY",
+          "error_code": "NO_AUTHORIZATION",
+          "policy_version": 2,
+          "step": "new_request_re_evaluated_under_v2"
+        }
+      ],
+      "title": "先准入后策略撤回"
+    }
+  },
+  "overall_passed": true,
+  "tool": "offline-application-execution-control",
+  "version": "1.0.0"
+}

@@ -1,0 +1,3180 @@
+{
+  "crash_fixture": {
+    "boot_at": "2026-06-01T08:00:00Z",
+    "device_groups": [
+      {
+        "group_id": "CG1",
+        "name": "crash-g1",
+        "org_id": "org-acme"
+      }
+    ],
+    "devices": [
+      {
+        "device_id": "cdev-1",
+        "generation": 1,
+        "group_id": "CG1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "cdev-2",
+        "generation": 1,
+        "group_id": "CG1",
+        "org_id": "org-acme"
+      }
+    ],
+    "issuer_certs": [
+      {
+        "issuer_id": "root-ca",
+        "kid": "c-root",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": null
+      },
+      {
+        "issuer_id": "c-iss",
+        "kid": "c-leaf",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "c-root"
+      }
+    ],
+    "organizations": [
+      {
+        "name": "Acme Corp",
+        "org_id": "org-acme",
+        "policy_version": 1
+      }
+    ],
+    "remote_issuer_status": [
+      {
+        "issuer_id": "c-iss",
+        "org_id": "org-acme",
+        "status": "GOOD"
+      }
+    ],
+    "rules": [
+      {
+        "description": "崩溃场景允许规则",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "feb89dc68e4ebe06ec3a7c906446c68d131d4dc4b3ecd67e8ec6519c721498b9",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "CR01",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      }
+    ]
+  },
+  "crash_scenarios": [
+    {
+      "crash_phase": "after_manifest_before_commit",
+      "device_id": "cdev-1",
+      "expect_exit_code": 42,
+      "expect_manifests_after_recovery": 0,
+      "expect_records_after_recovery": 0,
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "cdev-1",
+        "identity_digest": "dd62c6b2bd29522c0f63abb4642b15f552a1ab6ac2964f253589482770e416ac",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "f17f952d44969bc9a4104829b240b10c08b6645f1c40bb83f1ff73e24f306981",
+            "content_digest": "feb89dc68e4ebe06ec3a7c906446c68d131d4dc4b3ecd67e8ec6519c721498b9",
+            "entry_path": "c:\\program files\\crash\\app.exe",
+            "issuer_id": "c-iss",
+            "leaf_kid": "c-leaf",
+            "name": "crash-app",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-crash-pre"
+      },
+      "scenario_id": "KILL_PRE_COMMIT"
+    },
+    {
+      "crash_phase": "after_commit",
+      "device_id": "cdev-2",
+      "expect_exit_code": 43,
+      "expect_manifests_after_recovery": 1,
+      "expect_records_after_recovery": 1,
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "cdev-2",
+        "identity_digest": "dd62c6b2bd29522c0f63abb4642b15f552a1ab6ac2964f253589482770e416ac",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "f17f952d44969bc9a4104829b240b10c08b6645f1c40bb83f1ff73e24f306981",
+            "content_digest": "feb89dc68e4ebe06ec3a7c906446c68d131d4dc4b3ecd67e8ec6519c721498b9",
+            "entry_path": "c:\\program files\\crash\\app.exe",
+            "issuer_id": "c-iss",
+            "leaf_kid": "c-leaf",
+            "name": "crash-app",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-crash-post"
+      },
+      "scenario_id": "KILL_POST_COMMIT"
+    }
+  ],
+  "decision_cases": [
+    {
+      "case_id": "C01",
+      "cert_status": [],
+      "device_id": "dev-g1-01",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "基线摘要允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-01",
+        "identity_digest": "990ec525a5cf6637ebf3319566f20bbd7bee20ec88d38de5b2d45d1b6fcd8f67",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "8b0cebae98ccb607ab4da3912d946433b2cce1199e3fd37a79cae84103681538",
+            "content_digest": "5c1697d15979cf4fe6fd9b9c54e7cdc1623391db9d9f5a7ac6f785cc42f9b780",
+            "entry_path": "c:\\program files\\acme\\alpha\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "alpha",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C01"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C02",
+      "cert_status": [],
+      "device_id": "dev-g1-02",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "G1 组规则允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-02",
+        "identity_digest": "e6d956f3182331e01186a04dd78cb9f3527d5036763e540b16812466aebd1e53",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "76aaba09d58219bfb1f66f42f6cc68995141c86785ad753d6e22496ba2b24530",
+            "content_digest": "5269174622576478cf6efb303c806e09dd2042889aeeb7f4e82f6d2e4b7521bd",
+            "entry_path": "c:\\program files\\acme\\beta\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "beta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C02"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C03",
+      "cert_status": [],
+      "device_id": "dev-g2-01",
+      "expect_decision": "DENY",
+      "expect_error_code": "NO_AUTHORIZATION",
+      "note": "组规则跨组不生效，默认拒绝",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-01",
+        "identity_digest": "e6d956f3182331e01186a04dd78cb9f3527d5036763e540b16812466aebd1e53",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "76aaba09d58219bfb1f66f42f6cc68995141c86785ad753d6e22496ba2b24530",
+            "content_digest": "5269174622576478cf6efb303c806e09dd2042889aeeb7f4e82f6d2e4b7521bd",
+            "entry_path": "c:\\program files\\acme\\beta\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "beta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C03"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C04",
+      "cert_status": [],
+      "device_id": "dev-g1-03",
+      "expect_decision": "DENY",
+      "expect_error_code": "DENY_EXPLICIT",
+      "note": "明确拒绝覆盖组允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-03",
+        "identity_digest": "f22e47e7f60f65f754fa685051ef605ae2bc1c17beb2647784f66ba65956d11f",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "0dba7de5cbf76c0c49eb2273869416a3c4a5d904828224dc567202409e276079",
+            "content_digest": "a96f4f1feda46630101519f41709769829a027f20d948ab0ff1d2fe992df503b",
+            "entry_path": "c:\\program files\\acme\\gamma\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "gamma",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C04"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C05",
+      "cert_status": [],
+      "device_id": "dev-g1-04",
+      "expect_decision": "DENY",
+      "expect_error_code": "RULE_EXPIRED",
+      "note": "允许规则已过期",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-04",
+        "identity_digest": "3bcd37e686413109412a68ed1fb2f8b62a4c37273a51cec2bad28df3cec49eb3",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "d4958df4b6fb50a6d2383dc89b86cab9976bf87584fc46b3c0f7be5cee9728e1",
+            "content_digest": "3cda8608ea2a529e2920358de3d9af85f1e0cad1177d842c938eeeca32e9bb51",
+            "entry_path": "c:\\program files\\acme\\delta\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "delta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C05"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C06",
+      "cert_status": [],
+      "device_id": "dev-g1-05",
+      "expect_decision": "DENY",
+      "expect_error_code": "NO_AUTHORIZATION",
+      "note": "无任何规则，默认拒绝",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-05",
+        "identity_digest": "b8ead3a22e61f965de91ee87f0c2750cb052d9d5d0fe82e812a88f4996e0216b",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "79cd78aba36695f6d180f546b060224b5cce69ad7a551a7da50f9025acdfbc1b",
+            "content_digest": "bcca35368e9b76dacd3425dfb9bc30f417e7b0fe04dddf31e47cdbee5a2d60a1",
+            "entry_path": "c:\\program files\\acme\\epsilon\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "epsilon",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C06"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C07",
+      "cert_status": [],
+      "device_id": "dev-g1-06",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "签发者+路径段联合允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-06",
+        "identity_digest": "8923fed79c3d208455f7b2e9115424b7fd4633f82891e8e647d9364fd825d5df",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "3c1c592d47351d9b07088439f7c3e7099fa2fe68731de9ebd3331de784c7f2d6",
+            "content_digest": "5ee182d05f2b4773dc2297faf14cab73dd3e234dbf4d2484c6bc07b87931df9c",
+            "entry_path": "c:\\program files\\vendor\\tools\\zeta.exe",
+            "issuer_id": "iss-vendor",
+            "leaf_kid": "leaf-iss-vendor",
+            "name": "zeta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C07"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C08",
+      "cert_status": [],
+      "device_id": "dev-g1-07",
+      "expect_decision": "DENY",
+      "expect_error_code": "DENY_EXPLICIT",
+      "note": "敏感子目录联合拒绝覆盖允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-07",
+        "identity_digest": "6ae6e0672cfd01b7fec9152e815b8696d2623265b8aa8ab8847e7500a6d48444",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "7188b0c5aaf526d0908288eac2ea737e8f053f6466a37987c089873a809a3495",
+            "content_digest": "a15e16adfa8083e6af985f0727cec060347e7457cc508861595b8065143a88b2",
+            "entry_path": "c:\\program files\\vendor\\tools\\secret\\eta.exe",
+            "issuer_id": "iss-vendor",
+            "leaf_kid": "leaf-iss-vendor",
+            "name": "eta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C08"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C09",
+      "cert_status": [],
+      "device_id": "dev-g1-08",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "G1 基线联合允许 R06 命中",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-08",
+        "identity_digest": "a2d62761186688df3d8fea3db95132761db06676ed0e03ec1f960a0ef62d1b33",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "ba52517f4430523d899f35c87d7e64bf61be850d582532710523ce71ad863751",
+            "content_digest": "0ff02de80943788ef9c04c6f234aa3a4734e3b87b07a7c234b74a7d7ef7549eb",
+            "entry_path": "c:\\program files\\vendor\\tools\\theta.exe",
+            "issuer_id": "iss-vendor",
+            "leaf_kid": "leaf-iss-vendor",
+            "name": "theta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C09"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C10",
+      "cert_status": [],
+      "device_id": "dev-g2-02",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "G2 同时命中基线 R06 与组 R08",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-02",
+        "identity_digest": "451d3bbfaf4f28aa51c39c4067d7de5b9132fe0c67cdc28dbddbee90397131ea",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "1fc003a91759a04acda39b5bbe76c339cf73e41e16402409490a6e06af024c8c",
+            "content_digest": "0e4ed8982379de11d143fd17b79f6a117d99d83cc7888ec81226aade31db35f7",
+            "entry_path": "c:\\program files\\vendor\\tools\\iota.exe",
+            "issuer_id": "iss-vendor",
+            "leaf_kid": "leaf-iss-vendor",
+            "name": "iota",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C10"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C11",
+      "cert_status": [],
+      "device_id": "dev-g1-09",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "命中 acme/signed 同名段允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-09",
+        "identity_digest": "9fadd12fe7d20e13e283035f80f2bc7158f453cda73d1e327d6d0e4f936c6c14",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "9e46256b3e588e0b379fb3a661d183cfb720329e7c4adade9827aa556d3a328a",
+            "content_digest": "315da04dd54a80f684cc06e77755450529dc8310aa547afdc0f56de35311b684",
+            "entry_path": "c:\\program files\\acme\\signed\\kappa.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "kappa",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C11"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C12",
+      "cert_status": [],
+      "device_id": "dev-g1-10",
+      "expect_decision": "DENY",
+      "expect_error_code": "DENY_EXPLICIT",
+      "note": "同名段下拒绝子树优先",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-10",
+        "identity_digest": "50978aa81eba597e8e56a0b55ee4d5007aa15ee296bb7e8382d4fa95be9018ea",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "0f6241582746edf45257d6be5da97896f1f7d3cfb146d3ec17a0c68404d07200",
+            "content_digest": "c64bd7cfa4a3c2beb64976d21e681ff28e37c0201566b00858d5618d687dd44e",
+            "entry_path": "c:\\program files\\acme\\signed\\untrusted\\lambda.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "lambda",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C12"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C13",
+      "cert_status": [],
+      "device_id": "dev-g1-11",
+      "expect_decision": "DENY",
+      "expect_error_code": "NO_AUTHORIZATION",
+      "note": "exact 段不得子串匹配 exactish",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-11",
+        "identity_digest": "b1967f6dc08c1df9cab03a147baf33757fdfa40eeed7588a3b1a4c96fd7d4252",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "323d6e12dd453228188247a1a1c9157c782c1c8e8786457461e5d87e479bd04d",
+            "content_digest": "e4a08147bf0496b6db4c654e1f58b324127d47038e452c8663ab62d91f66baac",
+            "entry_path": "c:\\program files\\vendor\\exactish\\mu.exe",
+            "issuer_id": "iss-vendor",
+            "leaf_kid": "leaf-iss-vendor",
+            "name": "mu",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C13"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C14",
+      "cert_status": [],
+      "device_id": "dev-g3-01",
+      "expect_decision": "DENY",
+      "expect_error_code": "NO_AUTHORIZATION",
+      "note": "无临时授权时 G3 不许 eta",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-01",
+        "identity_digest": "7d90ea7ddbfaff47f453710a0ce08d806806fee5e830777fb53b68cefd50a6fd",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "660ced4cc83cee72308d1573d5102065a3a71dfbd50b15b69adc146d8ec18dba",
+            "content_digest": "a15e16adfa8083e6af985f0727cec060347e7457cc508861595b8065143a88b2",
+            "entry_path": "c:\\program files\\acme\\eta\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "eta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C14"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C15",
+      "cert_status": [],
+      "device_id": "dev-g3-02",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "双审批临时放宽生效",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-02",
+        "identity_digest": "7d90ea7ddbfaff47f453710a0ce08d806806fee5e830777fb53b68cefd50a6fd",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "660ced4cc83cee72308d1573d5102065a3a71dfbd50b15b69adc146d8ec18dba",
+            "content_digest": "a15e16adfa8083e6af985f0727cec060347e7457cc508861595b8065143a88b2",
+            "entry_path": "c:\\program files\\acme\\eta\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "eta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C15"
+      },
+      "temp_grants": [
+        {
+          "approver1": "alice",
+          "approver2": "bob",
+          "base_rule_id": "R11",
+          "group_id": "G3",
+          "valid_from": "2026-06-01T08:00:00Z",
+          "valid_to": "2026-09-01T08:00:00Z"
+        }
+      ]
+    },
+    {
+      "case_id": "C16",
+      "cert_status": [],
+      "device_id": "dev-g3-03",
+      "expect_decision": "DENY",
+      "expect_error_code": "RULE_EXPIRED",
+      "note": "临时授权到期",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-03",
+        "identity_digest": "7d90ea7ddbfaff47f453710a0ce08d806806fee5e830777fb53b68cefd50a6fd",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "660ced4cc83cee72308d1573d5102065a3a71dfbd50b15b69adc146d8ec18dba",
+            "content_digest": "a15e16adfa8083e6af985f0727cec060347e7457cc508861595b8065143a88b2",
+            "entry_path": "c:\\program files\\acme\\eta\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "eta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C16"
+      },
+      "temp_grants": [
+        {
+          "approver1": "alice",
+          "approver2": "bob",
+          "base_rule_id": "R11",
+          "group_id": "G3",
+          "valid_from": "2026-01-01T00:00:00Z",
+          "valid_to": "2026-03-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "case_id": "C17",
+      "cert_status": [],
+      "device_id": "dev-g3-04",
+      "expect_decision": "DENY",
+      "expect_error_code": "NO_AUTHORIZATION",
+      "note": "同审批人临时授权在装载时被拒，等同无授权",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-04",
+        "identity_digest": "7d90ea7ddbfaff47f453710a0ce08d806806fee5e830777fb53b68cefd50a6fd",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "660ced4cc83cee72308d1573d5102065a3a71dfbd50b15b69adc146d8ec18dba",
+            "content_digest": "a15e16adfa8083e6af985f0727cec060347e7457cc508861595b8065143a88b2",
+            "entry_path": "c:\\program files\\acme\\eta\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "eta",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C17"
+      },
+      "temp_grants": [
+        {
+          "approver1": "alice",
+          "approver2": "alice",
+          "base_rule_id": "R11",
+          "expect_create_error": "TEMP_GRANT_INVALID",
+          "group_id": "G3",
+          "valid_from": "2026-06-01T08:00:00Z",
+          "valid_to": "2026-09-01T08:00:00Z"
+        }
+      ]
+    },
+    {
+      "case_id": "C18",
+      "cert_status": [],
+      "device_id": "dev-g1-12",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "远端状态 GOOD",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g1-12",
+        "identity_digest": "2d60e5142af3336a792cc5cba133ffe7d832db8e7d486eb948fead62a6fdf502",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "1a247eaaddad1929142d1e7d8f0f7401e652b17f44f678d7b78d049f26845f2a",
+            "content_digest": "19dd4f66a54e7b39bb954c43a7efc37df0cb4ca49c3c6984ebd45ab74996cac9",
+            "entry_path": "c:\\program files\\remote\\iota.exe",
+            "issuer_id": "iss-remote",
+            "leaf_kid": "leaf-iss-remote",
+            "name": "iota-remote",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C18"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C19",
+      "cert_status": [],
+      "device_id": "dev-g2-03",
+      "expect_decision": "DENY",
+      "expect_error_code": "REMOTE_ISSUER_STATUS_BAD",
+      "note": "远端 SUSPENDED",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [
+        {
+          "issuer_id": "iss-remote",
+          "status": "SUSPENDED"
+        }
+      ],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-03",
+        "identity_digest": "2d60e5142af3336a792cc5cba133ffe7d832db8e7d486eb948fead62a6fdf502",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "1a247eaaddad1929142d1e7d8f0f7401e652b17f44f678d7b78d049f26845f2a",
+            "content_digest": "19dd4f66a54e7b39bb954c43a7efc37df0cb4ca49c3c6984ebd45ab74996cac9",
+            "entry_path": "c:\\program files\\remote\\iota.exe",
+            "issuer_id": "iss-remote",
+            "leaf_kid": "leaf-iss-remote",
+            "name": "iota-remote",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C19"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C20",
+      "cert_status": [],
+      "device_id": "dev-g2-04",
+      "expect_decision": "DENY",
+      "expect_error_code": "REMOTE_ISSUER_STATUS_BAD",
+      "note": "远端 REVOKED",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [
+        {
+          "issuer_id": "iss-remote",
+          "status": "REVOKED"
+        }
+      ],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-04",
+        "identity_digest": "2d60e5142af3336a792cc5cba133ffe7d832db8e7d486eb948fead62a6fdf502",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "1a247eaaddad1929142d1e7d8f0f7401e652b17f44f678d7b78d049f26845f2a",
+            "content_digest": "19dd4f66a54e7b39bb954c43a7efc37df0cb4ca49c3c6984ebd45ab74996cac9",
+            "entry_path": "c:\\program files\\remote\\iota.exe",
+            "issuer_id": "iss-remote",
+            "leaf_kid": "leaf-iss-remote",
+            "name": "iota-remote",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C20"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C21",
+      "cert_status": [
+        {
+          "kid": "leaf-revoked",
+          "status": "REVOKED"
+        }
+      ],
+      "device_id": "dev-g2-05",
+      "expect_decision": "DENY",
+      "expect_error_code": "ISSUER_KEY_REVOKED",
+      "note": "叶子密钥已吊销",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-05",
+        "identity_digest": "221648bf0b14844f18975fc649cc8d94080a8a6334af9b723a35f996eabae81e",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "fb424c630b47e72c8caea0ee012612a75af98063ffdd5bc862370a56ff46c3ea",
+            "content_digest": "315da04dd54a80f684cc06e77755450529dc8310aa547afdc0f56de35311b684",
+            "entry_path": "c:\\program files\\acme\\kappa\\app.exe",
+            "issuer_id": "iss-vendor",
+            "leaf_kid": "leaf-revoked",
+            "name": "kappa",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C21"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C22",
+      "cert_status": [
+        {
+          "kid": "leaf-acme-old",
+          "status": "ROTATED"
+        }
+      ],
+      "device_id": "dev-g2-06",
+      "expect_decision": "DENY",
+      "expect_error_code": "ISSUER_KEY_REVOKED",
+      "note": "轮换后旧钥 ROTATED 立即失效",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-06",
+        "identity_digest": "f7b13754078095eb67d0a9c7e059d06af478db9b3dbc3fce821e66470132d879",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "7988edbe747c02f988fa6a1f5f4083b557ab26cfad4c3dffe08e0372610af453",
+            "content_digest": "315da04dd54a80f684cc06e77755450529dc8310aa547afdc0f56de35311b684",
+            "entry_path": "c:\\program files\\acme\\kappa\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-acme-old",
+            "name": "kappa",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C22"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C23",
+      "cert_status": [],
+      "device_id": "dev-g2-07",
+      "expect_decision": "DENY",
+      "expect_error_code": "ISSUER_UNTRUSTED",
+      "note": "外来组织根不受信",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-07",
+        "identity_digest": "4e8edeaac5be8ad37614f466002462264981d8aade2cadad55fa4a6a83fa594d",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "9c1d69373b487596634e2a738efdd3cd1e65c3f3ff2d20084cf70399e7603d8f",
+            "content_digest": "e12b0464a6831527da247b15623851c04e23b00708827bbcbd5546fb1b92e13e",
+            "entry_path": "c:\\program files\\acme\\nu\\app.exe",
+            "issuer_id": "iss-foreign",
+            "leaf_kid": "leaf-foreign",
+            "name": "nu",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C23"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C24",
+      "cert_status": [],
+      "device_id": "dev-g2-08",
+      "expect_decision": "DENY",
+      "expect_error_code": "ISSUER_CHAIN_INVALID",
+      "note": "内容摘要与 chain_digest 不匹配",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-08",
+        "identity_digest": "fa5e204fe8a9aac0b825478ee656fb01556f4f599cf9f14590917fdc58729b9f",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "ee584fb6710edbe4e7423206ba12dec0434becba647413d6132295b6c62645e9",
+            "content_digest": "ff85e22c3e602854f64491fe6a86f60778c4624d2781c1e9f95d202104600000",
+            "entry_path": "c:\\program files\\acme\\tampered\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "tampered",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C24"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C25",
+      "cert_status": [],
+      "device_id": "dev-g2-09",
+      "expect_decision": "DENY",
+      "expect_error_code": "ISSUER_CHAIN_INVALID",
+      "note": "伪造的签发见证",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-09",
+        "identity_digest": "f54d117a2db955d1fe07300ab632a6207739c8d61161bf69554c2349729f03b8",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "ffde2aefef4404894e851a1855e2a1e07c96720e760267d3265b81ac295edead",
+            "content_digest": "81637f47a07e7ed0c3c983a769461268bb84072b13237a7fa758f39b91f6ae1c",
+            "entry_path": "c:\\program files\\acme\\xi\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "xi",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C25"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C26",
+      "cert_status": [],
+      "device_id": "dev-g2-10",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "phi 在批准入口允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-10",
+        "identity_digest": "f9f241c96deab211988a32707610058622e9ae6c92e15d7ed85a18c48120658a",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "4fab45102b18a054f53d78bdaef7f661a6cbb3cbab79faedbe357818cc3ebf7d",
+            "content_digest": "1248a247067c9ec553fce592b9474e742fbad6d91509bb18e211f3cbd2457dfa",
+            "entry_path": "c:\\program files\\vendor\\approved\\phi.exe",
+            "issuer_id": "iss-vendor",
+            "leaf_kid": "leaf-iss-vendor",
+            "name": "phi",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C26"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C27",
+      "cert_status": [],
+      "device_id": "dev-g2-11",
+      "expect_decision": "DENY",
+      "expect_error_code": "NO_AUTHORIZATION",
+      "note": "同一摘要移动入口，身份变化须重判且无授权",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-11",
+        "identity_digest": "88cda9726df76808d4e987c0ef714c9ac945731515f7b2c643ace1f3ed111c29",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "4fab45102b18a054f53d78bdaef7f661a6cbb3cbab79faedbe357818cc3ebf7d",
+            "content_digest": "1248a247067c9ec553fce592b9474e742fbad6d91509bb18e211f3cbd2457dfa",
+            "entry_path": "c:\\users\\public\\downloads\\phi.exe",
+            "issuer_id": "iss-vendor",
+            "leaf_kid": "leaf-iss-vendor",
+            "name": "phi",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C27"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C28",
+      "cert_status": [],
+      "device_id": "dev-g2-12",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "主程序+2 依赖全部允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-12",
+        "identity_digest": "416d0ae711178af15af1ccadc22a151c0b5844544dbf1583d6791e92cf85534b",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "d28da9316eea3c89fde0e94817bb45e389fa2ccb7b6ccaacde88b76e4eb5c40e",
+            "content_digest": "e3a02c0e7b57af3ea0618ed2bfa0abb1be5d718a85e82afce0152777df4997b2",
+            "entry_path": "c:\\program files\\acme\\pi\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "pi",
+            "role": "main",
+            "slot": 0
+          },
+          {
+            "chain_digest": "e700779e710e4c2ae58a44fe0a3cf8cb4223c3e4eba7de9d7e27300a28ee5cc9",
+            "content_digest": "954aa17b9374c9fa4450426a93b541e390ae3f658c8275ae2bc23c4216992b47",
+            "entry_path": "c:\\program files\\acme\\lib\\lib-a.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "lib-a",
+            "role": "dependency",
+            "slot": 1
+          },
+          {
+            "chain_digest": "ca84605aa6b308686c6658527fb0f4c17891bc22cb468067af78a118f21bd4c6",
+            "content_digest": "4eeb90dd2d5347d6b27a60814d5173d254bf6a3fd77f3fd5bf0403c0ef6e3be5",
+            "entry_path": "c:\\program files\\acme\\lib\\lib-b.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "lib-b",
+            "role": "dependency",
+            "slot": 2
+          }
+        ],
+        "request_id": "req-C28"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C29",
+      "cert_status": [],
+      "device_id": "dev-g3-05",
+      "expect_decision": "DENY",
+      "expect_error_code": "DENY_EXPLICIT",
+      "note": "主程序被明确拒绝，整单拒绝",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-05",
+        "identity_digest": "a9f9da007bc9a39a7491567595ad80d13b421f69ab1997581c6d7fbb1a9fa462",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "248903e2c48f7e6eb9264d79608e6cfbd053b6c8b044b9956dabbba3f49ceb72",
+            "content_digest": "b54ad27e2697ecea38206634ff95730b3ceaaa329d0df3a89924fff03fb40c9d",
+            "entry_path": "c:\\program files\\acme\\rho\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "rho",
+            "role": "main",
+            "slot": 0
+          },
+          {
+            "chain_digest": "e700779e710e4c2ae58a44fe0a3cf8cb4223c3e4eba7de9d7e27300a28ee5cc9",
+            "content_digest": "954aa17b9374c9fa4450426a93b541e390ae3f658c8275ae2bc23c4216992b47",
+            "entry_path": "c:\\program files\\acme\\lib\\lib-a.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "lib-a",
+            "role": "dependency",
+            "slot": 1
+          },
+          {
+            "chain_digest": "ca84605aa6b308686c6658527fb0f4c17891bc22cb468067af78a118f21bd4c6",
+            "content_digest": "4eeb90dd2d5347d6b27a60814d5173d254bf6a3fd77f3fd5bf0403c0ef6e3be5",
+            "entry_path": "c:\\program files\\acme\\lib\\lib-b.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "lib-b",
+            "role": "dependency",
+            "slot": 2
+          }
+        ],
+        "request_id": "req-C29"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C30",
+      "cert_status": [],
+      "device_id": "dev-g3-06",
+      "expect_decision": "DENY",
+      "expect_error_code": "NO_AUTHORIZATION",
+      "note": "依赖无授权，整单拒绝",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-06",
+        "identity_digest": "c5c1e2c51fc25095157a7bc4a5de54a9f7cc1442ee447ecf04051d0e342676c1",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "d28da9316eea3c89fde0e94817bb45e389fa2ccb7b6ccaacde88b76e4eb5c40e",
+            "content_digest": "e3a02c0e7b57af3ea0618ed2bfa0abb1be5d718a85e82afce0152777df4997b2",
+            "entry_path": "c:\\program files\\acme\\pi\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "pi",
+            "role": "main",
+            "slot": 0
+          },
+          {
+            "chain_digest": "fc2d782bed212579141f0f6b6c3e16c03162442a05607539304c7397b79a4378",
+            "content_digest": "80205a6b20735904fd163371e7d9ad73cf63b2fc1294dcf342e87aed849760a8",
+            "entry_path": "c:\\program files\\acme\\lib\\unknown.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "omicro n",
+            "role": "dependency",
+            "slot": 1
+          }
+        ],
+        "request_id": "req-C30"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C31",
+      "cert_status": [],
+      "device_id": "dev-g3-07",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "三件套全部允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-07",
+        "identity_digest": "a3c03d390fcdbe9ef592962d783977d903b105bbab40e8dbfce878006116d1ef",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "7b5cec76264dab6a3e8dac31e45bc1ca56e0b5f84a0d3886167525b9dc09363b",
+            "content_digest": "def035dd5b6f5507c9da5ab3c73d87b6450453055084e5e58b38fd5a24426ddf",
+            "entry_path": "c:\\program files\\acme\\suite\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "suite-main",
+            "role": "main",
+            "slot": 0
+          },
+          {
+            "chain_digest": "94ffd90c60a194e330215ed96890bb6559df32e35a972af5d17a2fc0947ea34b",
+            "content_digest": "666bc1f5e956d66ec88d27dd05c5d8a870289a07d0abc0f3785c356585c5ce3d",
+            "entry_path": "c:\\program files\\acme\\suite\\d1.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "suite-dep1",
+            "role": "dependency",
+            "slot": 1
+          },
+          {
+            "chain_digest": "1b6f1341df89f15d1c14246b0622b5068397b853552a5e95e17578f39177110d",
+            "content_digest": "bc91da9b79244737be443e1ecb454f0eb4613d235613caa59c3424e858644a7c",
+            "entry_path": "c:\\program files\\acme\\suite\\d2.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "suite-dep2",
+            "role": "dependency",
+            "slot": 2
+          }
+        ],
+        "request_id": "req-C31"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C32",
+      "cert_status": [],
+      "device_id": "dev-g3-08",
+      "expect_decision": "DENY",
+      "expect_error_code": "DENY_EXPLICIT",
+      "note": "套件中混入明确拒绝部件",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-08",
+        "identity_digest": "38a8da3cacaaca0e3b11df4710e249733cd377772f777ab3f931a7340d48aed6",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "7b5cec76264dab6a3e8dac31e45bc1ca56e0b5f84a0d3886167525b9dc09363b",
+            "content_digest": "def035dd5b6f5507c9da5ab3c73d87b6450453055084e5e58b38fd5a24426ddf",
+            "entry_path": "c:\\program files\\acme\\suite\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "suite-main",
+            "role": "main",
+            "slot": 0
+          },
+          {
+            "chain_digest": "94ffd90c60a194e330215ed96890bb6559df32e35a972af5d17a2fc0947ea34b",
+            "content_digest": "666bc1f5e956d66ec88d27dd05c5d8a870289a07d0abc0f3785c356585c5ce3d",
+            "entry_path": "c:\\program files\\acme\\suite\\d1.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "suite-dep1",
+            "role": "dependency",
+            "slot": 1
+          },
+          {
+            "chain_digest": "b302e13b75a286f9904e83008fcdb1b0ca841a6715bce02b1ec8767924a9bf47",
+            "content_digest": "a61b4368e60a956ca446050c55e5b58092e94d92e8238b82ffdb42c67e564097",
+            "entry_path": "c:\\program files\\acme\\suite\\d3.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "psi",
+            "role": "dependency",
+            "slot": 2
+          }
+        ],
+        "request_id": "req-C32"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C33",
+      "cert_status": [],
+      "device_id": "dev-g3-09",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "主程序+25 依赖达到上限全部允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-09",
+        "identity_digest": "5d8583fb90af1638a1dd78e9f8d63064f91bdc8bd1e84da058ad057d8e015ef4",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "344a18b6e7f7430ea788850ff638044c6be42401b269533d7c3afd0fc3938a15",
+            "content_digest": "f2331ea8569d5972b45979326e277e684274ced7f4c5b2f2f6edd6b5894f8f4b",
+            "entry_path": "c:\\program files\\acme\\big\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "big-main",
+            "role": "main",
+            "slot": 0
+          },
+          {
+            "chain_digest": "389d1f98218696058ac18d5836cbe667579148c6b2f6ddf5a80a53587e83802e",
+            "content_digest": "7ac4b6c4c56a4ec863dd6a642376b8490277ba8113b12ef5f98afb60034931b4",
+            "entry_path": "c:\\program files\\acme\\big\\dep01.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep01",
+            "role": "dependency",
+            "slot": 1
+          },
+          {
+            "chain_digest": "d4ed1aa61cfbe82aa49fb6202bdacf9067652324e1ed6b6516fac133889744e8",
+            "content_digest": "e6ab87a5fa6b30f5917fa19cfc5b9fe687877ccc2ab71cb236a011ac2224db00",
+            "entry_path": "c:\\program files\\acme\\big\\dep02.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep02",
+            "role": "dependency",
+            "slot": 2
+          },
+          {
+            "chain_digest": "53bb3379d35db760262de3a56496fcd9515837a7403ea3bf64176b9e4039edfd",
+            "content_digest": "cd11551dc3444e2e2045779fa37c588d9e36c73eb9b399e509b77f1fcd1bf67b",
+            "entry_path": "c:\\program files\\acme\\big\\dep03.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep03",
+            "role": "dependency",
+            "slot": 3
+          },
+          {
+            "chain_digest": "9f8913e72d36cf1bdc43e4c40bfec76cebfc3c3132a6dcdcee3ae0883db5a06e",
+            "content_digest": "af0dc17f7f773c90cb1108496205c8e0587230dfe2713bb778c0778c3b9396a5",
+            "entry_path": "c:\\program files\\acme\\big\\dep04.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep04",
+            "role": "dependency",
+            "slot": 4
+          },
+          {
+            "chain_digest": "e66c1bc4eaa945449b7b290a93663e8aec8f8b13e824bb8298b48d68988ec1e7",
+            "content_digest": "887d4f650324730902f12cc209753c819961e9b895644ba47896f4582b013e04",
+            "entry_path": "c:\\program files\\acme\\big\\dep05.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep05",
+            "role": "dependency",
+            "slot": 5
+          },
+          {
+            "chain_digest": "7d3cd357ecfc07436333ef36a32c418e30f6220acc5656a99d27c27d11a2cfd7",
+            "content_digest": "da78f82bf6dc03b5f62769ce1aeba66d7f5d462750081773953d48b1f6385632",
+            "entry_path": "c:\\program files\\acme\\big\\dep06.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep06",
+            "role": "dependency",
+            "slot": 6
+          },
+          {
+            "chain_digest": "eb2f2e17d36ac493a55681961117f541a24173df7ef576bf5ba9128bf18bce04",
+            "content_digest": "6c330eee6a7fbd4b4a6d2dd5440c926c8aa4ecab328f52856f0faecb8b22e93e",
+            "entry_path": "c:\\program files\\acme\\big\\dep07.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep07",
+            "role": "dependency",
+            "slot": 7
+          },
+          {
+            "chain_digest": "e0aac61394564d96219b8d01f97592fea2e697a1e8fb52b82eb7df39ca438e53",
+            "content_digest": "56fb5e85ff3a70755c4e919acb11378fff9624f274734117aa5b290db2222d7e",
+            "entry_path": "c:\\program files\\acme\\big\\dep08.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep08",
+            "role": "dependency",
+            "slot": 8
+          },
+          {
+            "chain_digest": "34d50dfbaacf4a431b653cd0182ba8d3f2a469793eff03932e5f8cd812668155",
+            "content_digest": "74be37f1f24d7f5840d367a3e76e5126cf4eb770390ae84361c61640a55d32d2",
+            "entry_path": "c:\\program files\\acme\\big\\dep09.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep09",
+            "role": "dependency",
+            "slot": 9
+          },
+          {
+            "chain_digest": "1923c006983a410bfe809f340614f6efd63eb6e21ab41af0ae8346bd3ff1db0f",
+            "content_digest": "dfc7b781d78c46e23a220fb68a4877e219ff91d2b2015a0c759863dc12a5fb78",
+            "entry_path": "c:\\program files\\acme\\big\\dep10.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep10",
+            "role": "dependency",
+            "slot": 10
+          },
+          {
+            "chain_digest": "c32d2e03fa1008482da289d913d7a6d582a6626e3e3526b3ac9a48b9819bbb58",
+            "content_digest": "6ed99ced8e2b5037c75632c9167bd1f2c95598a8a1db1241a6170b0aa2f619be",
+            "entry_path": "c:\\program files\\acme\\big\\dep11.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep11",
+            "role": "dependency",
+            "slot": 11
+          },
+          {
+            "chain_digest": "de5f4cbe251c810db12144359b3560baa3dba39b006ee97da371e17f5e676c5f",
+            "content_digest": "a945d8cc6dfcca3e0dd717e89162c8a75153ccbcc72d39c7439452fef7e92c71",
+            "entry_path": "c:\\program files\\acme\\big\\dep12.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep12",
+            "role": "dependency",
+            "slot": 12
+          },
+          {
+            "chain_digest": "83e301ef85d9d8845af7c51967f392662b26f220c002415486a52cbff8b68e86",
+            "content_digest": "c96e970975855bb91bcb6cf6a95bdad50e1dd551ba4238a4462957d0ae447cb4",
+            "entry_path": "c:\\program files\\acme\\big\\dep13.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep13",
+            "role": "dependency",
+            "slot": 13
+          },
+          {
+            "chain_digest": "a3c01dfb4d804a09c673892d346b7b2ee913fc0a6e0d5d6a3a36bdf2bedb8491",
+            "content_digest": "d5f728eef261914b146894fe484649e8cb38a41a6cc0b62c6c9a3413dc3ec657",
+            "entry_path": "c:\\program files\\acme\\big\\dep14.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep14",
+            "role": "dependency",
+            "slot": 14
+          },
+          {
+            "chain_digest": "4350fa05561b7dbf9fb497a83324e19241ebdf641b1bd64ca65fd2a5efcb28d0",
+            "content_digest": "6b0051bc43217f9bdf31f3b6a649271b0e299226d6add4e307029e80c2c506ca",
+            "entry_path": "c:\\program files\\acme\\big\\dep15.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep15",
+            "role": "dependency",
+            "slot": 15
+          },
+          {
+            "chain_digest": "5cdacd238a1e1ec8c107124ab15df572c0c4e42ea60ebb4b7c352379acd281a3",
+            "content_digest": "1369a9aba9b49c52dec8d525ff622899c182e1cbc90ce745e5d9b26e7ab41d7c",
+            "entry_path": "c:\\program files\\acme\\big\\dep16.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep16",
+            "role": "dependency",
+            "slot": 16
+          },
+          {
+            "chain_digest": "6a65f3d7128579b588118a7419842d3cbc9d26cb5b9ad9dbad902640d553c902",
+            "content_digest": "6c60d92436a72b369ea6981eeb1e3312521fc6e462745531dc8a3ed5a97c8d98",
+            "entry_path": "c:\\program files\\acme\\big\\dep17.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep17",
+            "role": "dependency",
+            "slot": 17
+          },
+          {
+            "chain_digest": "db44640ec705553aceadba4469363c2970ac7e45d54ba0c12d88d0c0367f17e4",
+            "content_digest": "574bcaf04d77ac85c63bda46e2eaf727a53dfd3641fa92a5c625437cfa24672e",
+            "entry_path": "c:\\program files\\acme\\big\\dep18.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep18",
+            "role": "dependency",
+            "slot": 18
+          },
+          {
+            "chain_digest": "b6ad9330bb26569ddad12dd7f9f67dd74d97dde1f9edfe2af4cf2d9dd33dc1d6",
+            "content_digest": "b4243ca62830e72f3b42ff46ab7198496058feaad7cf06274b752eaba5b0d17e",
+            "entry_path": "c:\\program files\\acme\\big\\dep19.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep19",
+            "role": "dependency",
+            "slot": 19
+          },
+          {
+            "chain_digest": "aa1651ee3b465db76ed0ec2f74b7ee72669987bc9c6d96107ff28329de48ce10",
+            "content_digest": "505dfc3ef94c5e2a51ce06eb08d1d17f318e1e293d7360ced0c15fbc39e1a0ce",
+            "entry_path": "c:\\program files\\acme\\big\\dep20.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep20",
+            "role": "dependency",
+            "slot": 20
+          },
+          {
+            "chain_digest": "d1ae4696f75b4d2141deba4e660516fb6396bc2bfca18bfa1df15b32a6f31976",
+            "content_digest": "d70e4624b445ec8212a1dbc9f4574331bf0750788e93d591ed6bd2b273eb841a",
+            "entry_path": "c:\\program files\\acme\\big\\dep21.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep21",
+            "role": "dependency",
+            "slot": 21
+          },
+          {
+            "chain_digest": "048f5ce3a971334f536ce380bec2cd0db83ccb3248ec48367b06e50eaadec1d3",
+            "content_digest": "73c4f304604212ac3e357c7d2c43a422d8a1360b7ca0a650a6019faed9d885fc",
+            "entry_path": "c:\\program files\\acme\\big\\dep22.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep22",
+            "role": "dependency",
+            "slot": 22
+          },
+          {
+            "chain_digest": "d92008d62c9a7d1c8cdb2be5e324d1dfc909ad75649aea067f03a35d23f013b0",
+            "content_digest": "4a272626a9941f76fde71cad54f8cfb3b3522b13666c0fa4e091f65720b76be0",
+            "entry_path": "c:\\program files\\acme\\big\\dep23.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep23",
+            "role": "dependency",
+            "slot": 23
+          },
+          {
+            "chain_digest": "dbfd48869b5b8dcfcbb5f10a5612496eb3e086d7411bb1987dda3bec46916732",
+            "content_digest": "7ad6b25ccef55db5d23f7ab3456eae3eed921ec0b181f2f7522b060a66c27b4d",
+            "entry_path": "c:\\program files\\acme\\big\\dep24.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep24",
+            "role": "dependency",
+            "slot": 24
+          },
+          {
+            "chain_digest": "9b9146637b36116527b1d3dc63e4f01332bb016f99fbd7c109fa268c7f4b47c1",
+            "content_digest": "77481cc301263d87bf9901e04c638a0b4f681863a05824759dae6239c1998a2e",
+            "entry_path": "c:\\program files\\acme\\big\\dep25.dll",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "dep25",
+            "role": "dependency",
+            "slot": 25
+          }
+        ],
+        "request_id": "req-C33"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C34",
+      "cert_status": [],
+      "device_id": "dev-g3-10",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "换钥后新钥请求作为新身份判定允许",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-10",
+        "identity_digest": "ce60769b6b6c4dd3d1fe25a6b504b3b2a736234ada55ff710a97ba66c41a199e",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "9d560907afcec38ad01ff594e151c00a3f420263503815c3ec2f50de8b65aefa",
+            "content_digest": "4ad7731233f25f6a2251d1738f55960cb7eb8f44d6fde1f404907bce96503bf5",
+            "entry_path": "c:\\program files\\acme\\upsilon\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-acme-new",
+            "name": "upsilon",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C34"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C35",
+      "cert_status": [],
+      "device_id": "dev-g3-11",
+      "expect_decision": "DENY",
+      "expect_error_code": "RULE_EXPIRED",
+      "note": "联合允许规则已过期",
+      "now": "2026-09-01T08:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g3-11",
+        "identity_digest": "4e62ebd2cd7ae7bb29dfdf047401fcc03be9f89b2fefe6d00180d1a796efe4c8",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "ae54d8b36ea8ef2fe072e520349a3617a91161734033469e7fbd4bcaae6c7d2f",
+            "content_digest": "f5a54638faca73cedaa8f31bdc10bdb6cf25dc81126909f35d1bd1f5673e5a2c",
+            "entry_path": "c:\\program files\\temp\\omega.exe",
+            "issuer_id": "iss-tmp",
+            "leaf_kid": "leaf-iss-tmp",
+            "name": "omega",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C35"
+      },
+      "temp_grants": []
+    },
+    {
+      "case_id": "C36",
+      "cert_status": [],
+      "device_id": "dev-g2-13",
+      "expect_decision": "ALLOW",
+      "expect_error_code": "OK",
+      "note": "G2 组允许 omega 在 G2 生效",
+      "now": "2026-06-15T12:00:00Z",
+      "remote_changes": [],
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "dev-g2-13",
+        "identity_digest": "7af9b0ebb89b89689190adfb50feb2423197660a53a468f9a5019bf5049c34f7",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "eb51d673a5ddb622800171d947279f0e1a65415eb38dc8f5600b4a1bc2442632",
+            "content_digest": "f5a54638faca73cedaa8f31bdc10bdb6cf25dc81126909f35d1bd1f5673e5a2c",
+            "entry_path": "c:\\program files\\acme\\omega\\app.exe",
+            "issuer_id": "iss-acme",
+            "leaf_kid": "leaf-iss-acme",
+            "name": "omega",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-C36"
+      },
+      "temp_grants": []
+    }
+  ],
+  "decision_fixture": {
+    "boot_at": "2026-06-01T08:00:00Z",
+    "device_groups": [
+      {
+        "group_id": "G1",
+        "name": "engineering",
+        "org_id": "org-acme"
+      },
+      {
+        "group_id": "G2",
+        "name": "finance",
+        "org_id": "org-acme"
+      },
+      {
+        "group_id": "G3",
+        "name": "contractors",
+        "org_id": "org-acme"
+      }
+    ],
+    "devices": [
+      {
+        "device_id": "dev-g1-01",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-02",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-03",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-04",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-05",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-06",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-07",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-08",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-09",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-10",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-11",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-12",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g1-13",
+        "generation": 1,
+        "group_id": "G1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-01",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-02",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-03",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-04",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-05",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-06",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-07",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-08",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-09",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-10",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-11",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-12",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g2-13",
+        "generation": 1,
+        "group_id": "G2",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-01",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-02",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-03",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-04",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-05",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-06",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-07",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-08",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-09",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-10",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-11",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-12",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "dev-g3-13",
+        "generation": 1,
+        "group_id": "G3",
+        "org_id": "org-acme"
+      }
+    ],
+    "issuer_certs": [
+      {
+        "issuer_id": "root-ca",
+        "kid": "root-1",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": null
+      },
+      {
+        "issuer_id": "iss-acme",
+        "kid": "leaf-iss-acme",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "root-1"
+      },
+      {
+        "issuer_id": "iss-vendor",
+        "kid": "leaf-iss-vendor",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "root-1"
+      },
+      {
+        "issuer_id": "iss-remote",
+        "kid": "leaf-iss-remote",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "root-1"
+      },
+      {
+        "issuer_id": "iss-evil",
+        "kid": "leaf-iss-evil",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "root-1"
+      },
+      {
+        "issuer_id": "iss-tmp",
+        "kid": "leaf-iss-tmp",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "root-1"
+      },
+      {
+        "issuer_id": "root-ca",
+        "kid": "root-foreign",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-other",
+        "parent_kid": null
+      },
+      {
+        "issuer_id": "iss-foreign",
+        "kid": "leaf-foreign",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-other",
+        "parent_kid": "root-foreign"
+      },
+      {
+        "issuer_id": "iss-acme",
+        "kid": "leaf-acme-old",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "root-1"
+      },
+      {
+        "issuer_id": "iss-acme",
+        "kid": "leaf-acme-new",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "root-1"
+      },
+      {
+        "issuer_id": "iss-vendor",
+        "kid": "leaf-revoked",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "root-1"
+      }
+    ],
+    "organizations": [
+      {
+        "name": "Acme Corp",
+        "org_id": "org-acme",
+        "policy_version": 1
+      }
+    ],
+    "remote_issuer_status": [
+      {
+        "issuer_id": "iss-acme",
+        "org_id": "org-acme",
+        "status": "GOOD"
+      },
+      {
+        "issuer_id": "iss-vendor",
+        "org_id": "org-acme",
+        "status": "GOOD"
+      },
+      {
+        "issuer_id": "iss-remote",
+        "org_id": "org-acme",
+        "status": "GOOD"
+      },
+      {
+        "issuer_id": "iss-tmp",
+        "org_id": "org-acme",
+        "status": "GOOD"
+      }
+    ],
+    "rules": [
+      {
+        "description": "基线摘要允许 alpha",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "5c1697d15979cf4fe6fd9b9c54e7cdc1623391db9d9f5a7ac6f785cc42f9b780",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R01",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "G1 组摘要允许 beta（G2/G3 无授权）",
+        "group_id": "G1",
+        "kind": "digest_allow",
+        "layer": "group",
+        "match_digest": "5269174622576478cf6efb303c806e09dd2042889aeeb7f4e82f6d2e4b7521bd",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R02",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "基线明确拒绝 gamma",
+        "group_id": null,
+        "kind": "deny_digest",
+        "layer": "baseline",
+        "match_digest": "a96f4f1feda46630101519f41709769829a027f20d948ab0ff1d2fe992df503b",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R03",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "G1 试图允许 gamma，但拒绝覆盖",
+        "group_id": "G1",
+        "kind": "digest_allow",
+        "layer": "group",
+        "match_digest": "a96f4f1feda46630101519f41709769829a027f20d948ab0ff1d2fe992df503b",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R04",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "delta 的允许规则在 T_MID 前已过期",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "3cda8608ea2a529e2920358de3d9af85f1e0cad1177d842c938eeeca32e9bb51",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R05",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_to": "2026-03-01T00:00:00Z",
+        "version_added": 1
+      },
+      {
+        "description": "签发者+路径段联合允许",
+        "group_id": null,
+        "kind": "issuer_path_allow",
+        "layer": "baseline",
+        "match_digest": null,
+        "match_issuer_id": "iss-vendor",
+        "match_path_segments": [
+          "vendor",
+          "tools"
+        ],
+        "org_id": "org-acme",
+        "rule_id": "R06",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "联合拒绝：敏感子目录覆盖允许",
+        "group_id": null,
+        "kind": "deny_issuer_path",
+        "layer": "baseline",
+        "match_digest": null,
+        "match_issuer_id": "iss-vendor",
+        "match_path_segments": [
+          "vendor",
+          "tools",
+          "secret"
+        ],
+        "org_id": "org-acme",
+        "rule_id": "R07",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "仅 G2 生效的联合允许",
+        "group_id": "G2",
+        "kind": "issuer_path_allow",
+        "layer": "group",
+        "match_digest": null,
+        "match_issuer_id": "iss-vendor",
+        "match_path_segments": [
+          "vendor",
+          "tools"
+        ],
+        "org_id": "org-acme",
+        "rule_id": "R08",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "acme/signed 联合允许（同名段陷阱）",
+        "group_id": null,
+        "kind": "issuer_path_allow",
+        "layer": "baseline",
+        "match_digest": null,
+        "match_issuer_id": "iss-acme",
+        "match_path_segments": [
+          "acme",
+          "signed"
+        ],
+        "org_id": "org-acme",
+        "rule_id": "R09",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "同名 acme 段下的拒绝子树",
+        "group_id": null,
+        "kind": "deny_issuer_path",
+        "layer": "baseline",
+        "match_digest": null,
+        "match_issuer_id": "iss-acme",
+        "match_path_segments": [
+          "acme",
+          "signed",
+          "untrusted"
+        ],
+        "org_id": "org-acme",
+        "rule_id": "R10",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "eta 的 G1 允许；G3 只能靠双审批临时放宽",
+        "group_id": "G1",
+        "kind": "digest_allow",
+        "layer": "group",
+        "match_digest": "a15e16adfa8083e6af985f0727cec060347e7457cc508861595b8065143a88b2",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R11",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "theta 允许过期",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "0ff02de80943788ef9c04c6f234aa3a4734e3b87b07a7c234b74a7d7ef7549eb",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R12",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_to": "2026-03-01T00:00:00Z",
+        "version_added": 1
+      },
+      {
+        "description": "tmp 联合允许已过期",
+        "group_id": null,
+        "kind": "issuer_path_allow",
+        "layer": "baseline",
+        "match_digest": null,
+        "match_issuer_id": "iss-tmp",
+        "match_path_segments": [
+          "temp"
+        ],
+        "org_id": "org-acme",
+        "rule_id": "R13",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_to": "2026-03-01T00:00:00Z",
+        "version_added": 1
+      },
+      {
+        "description": "iota 基线允许（远端状态变化用）",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "0e4ed8982379de11d143fd17b79f6a117d99d83cc7888ec81226aade31db35f7",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R14",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "iota-remote 基线允许（iss-remote 远端状态用例）",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "19dd4f66a54e7b39bb954c43a7efc37df0cb4ca49c3c6984ebd45ab74996cac9",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R14B",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "kappa 基线允许（换钥用）",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "315da04dd54a80f684cc06e77755450529dc8310aa547afdc0f56de35311b684",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R15",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "lambda 明确拒绝（临时放宽禁止对象）",
+        "group_id": null,
+        "kind": "deny_digest",
+        "layer": "baseline",
+        "match_digest": "c64bd7cfa4a3c2beb64976d21e681ff28e37c0201566b00858d5618d687dd44e",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R16",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "G1 允许 nu（跨组不生效）",
+        "group_id": "G1",
+        "kind": "digest_allow",
+        "layer": "group",
+        "match_digest": "e12b0464a6831527da247b15623851c04e23b00708827bbcbd5546fb1b92e13e",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R17",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "整段匹配，不得子串误匹配",
+        "group_id": null,
+        "kind": "issuer_path_allow",
+        "layer": "baseline",
+        "match_digest": null,
+        "match_issuer_id": "iss-vendor",
+        "match_path_segments": [
+          "vendor",
+          "exact"
+        ],
+        "org_id": "org-acme",
+        "rule_id": "R18",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "pi 基线允许",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "e3a02c0e7b57af3ea0618ed2bfa0abb1be5d718a85e82afce0152777df4997b2",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R19",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "rho 拒绝（多依赖混入）",
+        "group_id": null,
+        "kind": "deny_digest",
+        "layer": "baseline",
+        "match_digest": "b54ad27e2697ecea38206634ff95730b3ceaaa329d0df3a89924fff03fb40c9d",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R20",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "sigma 允许",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "7d02c15b9a703ee1f7b7c40c6e2eb2b2c961484ea08af793ff5733c62f985a52",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R21",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "tau 允许",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "572a3aa134b7b8ec8740cdbfa69b8da876c4506b90b65be4c91b4d0ca3c74879",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R22",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "依赖允许 lib-a",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "954aa17b9374c9fa4450426a93b541e390ae3f658c8275ae2bc23c4216992b47",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R23",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "依赖允许 lib-b",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "4eeb90dd2d5347d6b27a60814d5173d254bf6a3fd77f3fd5bf0403c0ef6e3be5",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R24",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "依赖允许 lib-c",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "d1666a4c983de9658dcbdd3b0a299a418501001e702ebcc324ba0417b0b0938d",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R25",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "依赖允许 lib-d",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "6e2e839f516c15d77c041b7f5171545c45c4be0d29d967905fc344cdacc15def",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R26",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "依赖允许 lib-e",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "8dbe8576e55648a1d1e8978c75aa244f5409ea76da592f42e1c6926228977953",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R27",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "套件主程序",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "def035dd5b6f5507c9da5ab3c73d87b6450453055084e5e58b38fd5a24426ddf",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R28",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "套件依赖1",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "666bc1f5e956d66ec88d27dd05c5d8a870289a07d0abc0f3785c356585c5ce3d",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R29",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "套件依赖2",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "bc91da9b79244737be443e1ecb454f0eb4613d235613caa59c3424e858644a7c",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R30",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "upsilon 允许",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "4ad7731233f25f6a2251d1738f55960cb7eb8f44d6fde1f404907bce96503bf5",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R31",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "phi 的路径联合允许（移动入口即失配，强制重判）",
+        "group_id": null,
+        "kind": "issuer_path_allow",
+        "layer": "baseline",
+        "match_digest": null,
+        "match_issuer_id": "iss-vendor",
+        "match_path_segments": [
+          "vendor",
+          "approved"
+        ],
+        "org_id": "org-acme",
+        "rule_id": "R32",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "chi 允许（同路径不同摘要）",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "23d5b719e76db6e702f89c3aff9388bb088cfcf318b9e3d9dc947a6f49a0f33c",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R33",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "psi 明确拒绝",
+        "group_id": null,
+        "kind": "deny_digest",
+        "layer": "baseline",
+        "match_digest": "a61b4368e60a956ca446050c55e5b58092e94d92e8238b82ffdb42c67e564097",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R34",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "G2 允许 omega",
+        "group_id": "G2",
+        "kind": "digest_allow",
+        "layer": "group",
+        "match_digest": "f5a54638faca73cedaa8f31bdc10bdb6cf25dc81126909f35d1bd1f5673e5a2c",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R35",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "25 依赖主程序",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "f2331ea8569d5972b45979326e277e684274ced7f4c5b2f2f6edd6b5894f8f4b",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 1",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "7ac4b6c4c56a4ec863dd6a642376b8490277ba8113b12ef5f98afb60034931b4",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D01",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 2",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "e6ab87a5fa6b30f5917fa19cfc5b9fe687877ccc2ab71cb236a011ac2224db00",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D02",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 3",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "cd11551dc3444e2e2045779fa37c588d9e36c73eb9b399e509b77f1fcd1bf67b",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D03",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 4",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "af0dc17f7f773c90cb1108496205c8e0587230dfe2713bb778c0778c3b9396a5",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D04",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 5",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "887d4f650324730902f12cc209753c819961e9b895644ba47896f4582b013e04",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D05",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 6",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "da78f82bf6dc03b5f62769ce1aeba66d7f5d462750081773953d48b1f6385632",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D06",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 7",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "6c330eee6a7fbd4b4a6d2dd5440c926c8aa4ecab328f52856f0faecb8b22e93e",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D07",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 8",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "56fb5e85ff3a70755c4e919acb11378fff9624f274734117aa5b290db2222d7e",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D08",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 9",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "74be37f1f24d7f5840d367a3e76e5126cf4eb770390ae84361c61640a55d32d2",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D09",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 10",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "dfc7b781d78c46e23a220fb68a4877e219ff91d2b2015a0c759863dc12a5fb78",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D10",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 11",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "6ed99ced8e2b5037c75632c9167bd1f2c95598a8a1db1241a6170b0aa2f619be",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D11",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 12",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "a945d8cc6dfcca3e0dd717e89162c8a75153ccbcc72d39c7439452fef7e92c71",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D12",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 13",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "c96e970975855bb91bcb6cf6a95bdad50e1dd551ba4238a4462957d0ae447cb4",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D13",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 14",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "d5f728eef261914b146894fe484649e8cb38a41a6cc0b62c6c9a3413dc3ec657",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D14",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 15",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "6b0051bc43217f9bdf31f3b6a649271b0e299226d6add4e307029e80c2c506ca",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D15",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 16",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "1369a9aba9b49c52dec8d525ff622899c182e1cbc90ce745e5d9b26e7ab41d7c",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D16",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 17",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "6c60d92436a72b369ea6981eeb1e3312521fc6e462745531dc8a3ed5a97c8d98",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D17",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 18",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "574bcaf04d77ac85c63bda46e2eaf727a53dfd3641fa92a5c625437cfa24672e",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D18",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 19",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "b4243ca62830e72f3b42ff46ab7198496058feaad7cf06274b752eaba5b0d17e",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D19",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 20",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "505dfc3ef94c5e2a51ce06eb08d1d17f318e1e293d7360ced0c15fbc39e1a0ce",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D20",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 21",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "d70e4624b445ec8212a1dbc9f4574331bf0750788e93d591ed6bd2b273eb841a",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D21",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 22",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "73c4f304604212ac3e357c7d2c43a422d8a1360b7ca0a650a6019faed9d885fc",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D22",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 23",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "4a272626a9941f76fde71cad54f8cfb3b3522b13666c0fa4e091f65720b76be0",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D23",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 24",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "7ad6b25ccef55db5d23f7ab3456eae3eed921ec0b181f2f7522b060a66c27b4d",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D24",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "big suite dep 25",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "77481cc301263d87bf9901e04c638a0b4f681863a05824759dae6239c1998a2e",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "R36D25",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      }
+    ]
+  },
+  "document_version": "1.0",
+  "flow_fixture": {
+    "boot_at": "2026-06-01T08:00:00Z",
+    "device_groups": [
+      {
+        "group_id": "FG1",
+        "name": "flow-g1",
+        "org_id": "org-acme"
+      },
+      {
+        "group_id": "FG2",
+        "name": "flow-g2",
+        "org_id": "org-acme"
+      }
+    ],
+    "devices": [
+      {
+        "device_id": "fdev-x",
+        "generation": 1,
+        "group_id": "FG1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "fdev-y",
+        "generation": 1,
+        "group_id": "FG1",
+        "org_id": "org-acme"
+      },
+      {
+        "device_id": "fdev-z",
+        "generation": 1,
+        "group_id": "FG1",
+        "org_id": "org-acme"
+      }
+    ],
+    "issuer_certs": [
+      {
+        "issuer_id": "root-ca",
+        "kid": "f-root",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": null
+      },
+      {
+        "issuer_id": "f-iss-a",
+        "kid": "f-leaf-a",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "f-root"
+      },
+      {
+        "issuer_id": "f-iss-b",
+        "kid": "f-leaf-b",
+        "not_after": "2099-12-31T23:59:59Z",
+        "not_before": "2026-01-01T00:00:00Z",
+        "org_id": "org-acme",
+        "parent_kid": "f-root"
+      }
+    ],
+    "organizations": [
+      {
+        "name": "Acme Corp",
+        "org_id": "org-acme",
+        "policy_version": 1
+      }
+    ],
+    "remote_issuer_status": [
+      {
+        "issuer_id": "f-iss-a",
+        "org_id": "org-acme",
+        "status": "GOOD"
+      },
+      {
+        "issuer_id": "f-iss-b",
+        "org_id": "org-acme",
+        "status": "GOOD"
+      }
+    ],
+    "rules": [
+      {
+        "description": "X 主程序 G1 允许",
+        "group_id": "FG1",
+        "kind": "digest_allow",
+        "layer": "group",
+        "match_digest": "dab110a2d769457542ef0907237d27f141625b1f7e49ca487b692362d7695505",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "FR01",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "X 依赖 G1 允许",
+        "group_id": "FG1",
+        "kind": "digest_allow",
+        "layer": "group",
+        "match_digest": "2bec71f0ba2d961bdf4eecf6cd31058bf1cccace6fc6f07d0cea69e0859bd9c1",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "FR02",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "Y 主程序基线允许",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "689dc3bfc822b63624e6b1181950847ed18fcf08185256cb010599c8315d8ede",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "FR03",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "Y 依赖基线允许（吊销对象）",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "10a641c036a904de22e3b180f4e37d68b404ac40afac4ca5c2fe0ba90ddcd627",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "FR04",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      },
+      {
+        "description": "Z 主程序允许（撤回对象）",
+        "group_id": null,
+        "kind": "digest_allow",
+        "layer": "baseline",
+        "match_digest": "6530d8129c11d63996cb6139907e85acecc42f921b0e1b59ee451c1f7f340491",
+        "match_issuer_id": null,
+        "match_path_segments": null,
+        "org_id": "org-acme",
+        "rule_id": "FR05",
+        "valid_from": "2026-06-01T08:00:00Z",
+        "valid_to": "2099-12-31T23:59:59Z",
+        "version_added": 1
+      }
+    ]
+  },
+  "flow_requests": {
+    "X": {
+      "device": "fdev-x",
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "fdev-x",
+        "identity_digest": "0f3852e6fed0bf5bad7837f07ea1c6f39caef7d217fdee2256494caf3f03191e",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "657a9e0bfd1b21ab53aea2a972b999f1bf65b83274e1e29a160f4b44a2f793a5",
+            "content_digest": "dab110a2d769457542ef0907237d27f141625b1f7e49ca487b692362d7695505",
+            "entry_path": "c:\\program files\\flow\\x\\x.exe",
+            "issuer_id": "f-iss-a",
+            "leaf_kid": "f-leaf-a",
+            "name": "flow-x-main",
+            "role": "main",
+            "slot": 0
+          },
+          {
+            "chain_digest": "b47eeaf607b0e48b22c91c0e15706fe379b4bc9249f0d22e7f5e45b82e06f8d2",
+            "content_digest": "2bec71f0ba2d961bdf4eecf6cd31058bf1cccace6fc6f07d0cea69e0859bd9c1",
+            "entry_path": "c:\\program files\\flow\\x\\xdep.dll",
+            "issuer_id": "f-iss-a",
+            "leaf_kid": "f-leaf-a",
+            "name": "flow-x-dep",
+            "role": "dependency",
+            "slot": 1
+          }
+        ],
+        "request_id": "req-x-admit"
+      },
+      "target_group": "FG2"
+    },
+    "Y": {
+      "dep_name": "flow-y-dep-rekeyed",
+      "dep_path": "C:\\Program Files\\Flow\\Y\\ydep.dll",
+      "device": "fdev-y",
+      "issuer_id": "f-iss-b",
+      "new_kid": "f-leaf-b2",
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "fdev-y",
+        "identity_digest": "c610e462130613f5e6c22807c30c74d783e462ef2e8eb88da61ab5930214a693",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "3b3f4575aaf74e0ad958cc31ea86816b60ca750789f707c95f457540f76bcd06",
+            "content_digest": "689dc3bfc822b63624e6b1181950847ed18fcf08185256cb010599c8315d8ede",
+            "entry_path": "c:\\program files\\flow\\y\\y.exe",
+            "issuer_id": "f-iss-a",
+            "leaf_kid": "f-leaf-a",
+            "name": "flow-y-main",
+            "role": "main",
+            "slot": 0
+          },
+          {
+            "chain_digest": "41911d47f0886ca63175bfa90211460b77e7a083c60d66bebca623ab47f9857b",
+            "content_digest": "10a641c036a904de22e3b180f4e37d68b404ac40afac4ca5c2fe0ba90ddcd627",
+            "entry_path": "c:\\program files\\flow\\y\\ydep.dll",
+            "issuer_id": "f-iss-b",
+            "leaf_kid": "f-leaf-b",
+            "name": "flow-y-dep",
+            "role": "dependency",
+            "slot": 1
+          }
+        ],
+        "request_id": "req-y-admit"
+      },
+      "revoke_kid": "f-leaf-b"
+    },
+    "Z": {
+      "device": "fdev-z",
+      "request": {
+        "client_ts": "2026-06-01T08:00:00Z",
+        "device_generation": 1,
+        "device_id": "fdev-z",
+        "identity_digest": "bb10e0bb3c0f9ba667b788e4884a4c0184fdc7963af90b067efe8a6616ec0795",
+        "org_id": "org-acme",
+        "parts": [
+          {
+            "chain_digest": "7ee58acc16be9083c35d47dd117760208290eee1eea768967f31d783b842ab61",
+            "content_digest": "6530d8129c11d63996cb6139907e85acecc42f921b0e1b59ee451c1f7f340491",
+            "entry_path": "c:\\program files\\flow\\z\\z.exe",
+            "issuer_id": "f-iss-a",
+            "leaf_kid": "f-leaf-a",
+            "name": "flow-z-main",
+            "role": "main",
+            "slot": 0
+          }
+        ],
+        "request_id": "req-z-admit"
+      },
+      "rule_id": "FR05"
+    }
+  },
+  "generated_at": "2026-11-20T00:00:00Z",
+  "scenario_order_xyz": [
+    "X",
+    "Y",
+    "Z",
+    "KILL_PRE_COMMIT",
+    "KILL_POST_COMMIT"
+  ],
+  "scenario_order_zyx": [
+    "Z",
+    "Y",
+    "X",
+    "KILL_POST_COMMIT",
+    "KILL_PRE_COMMIT"
+  ],
+  "time_axis": {
+    "T0": "2026-06-01T08:00:00Z",
+    "T_EXPIRED": "2026-03-01T00:00:00Z",
+    "T_LATE": "2026-09-01T08:00:00Z",
+    "T_MID": "2026-06-15T12:00:00Z"
+  }
+}
